@@ -4,9 +4,13 @@
     border-radius: 8px;
     border: solid 2px #dbdbdb;
 
+    #carouselExampleCaptions, .carousel-inner, .carousel-item{
+        height: 100%;
+    }
+
     img{
         width: 100%;
-        height: 515px;
+        height: 100%;
         border-radius: 8px;
     }
 

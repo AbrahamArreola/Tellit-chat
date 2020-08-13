@@ -22,7 +22,7 @@
 
         img {
             width: 50%;
-            height: 20%;
+            height: 18%;
             margin-bottom: 45px;
         }
 
@@ -113,5 +113,22 @@
         p {
             margin: 0 4px 0 0;
         }
+    }
+}
+
+@media (max-width: 500px){
+    #image-carousel-access-page{
+        display: none;
+    }
+
+    .access-form{
+        position: absolute;
+        width: 100% !important;
+        height: 100% !important;
+        margin: 0 !important;
+    }
+
+    footer{
+        display: none;
     }
 }
