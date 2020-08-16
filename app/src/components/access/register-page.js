@@ -7,7 +7,10 @@ import loginImage from "../../images/logo.JPG";
 
 import ImageCarousel from "./image-carousel";
 
-function RegisterPage() {
+const STRONG_PASSWORD = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})";
+const VALID_EMAIL = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+function RegisterPage(props) {
   const [state, setState] = useState({
     iconClass: "fa fa-eye-slash",
     inputType: "password",
@@ -20,6 +23,8 @@ function RegisterPage() {
     username: { value: "", color: null },
     password: { value: "", color: null },
   });
+
+  let auxDict = Object.assign({}, inputs);
 
   const [displayError, setDisplayError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -41,16 +46,50 @@ function RegisterPage() {
   };
 
   const handleInputChange = (e) => {
-    let auxDict = Object.assign({}, inputs);
     auxDict[e.target.name].value = e.target.value;
     auxDict[e.target.name].color = null;
 
     setInputs(auxDict);
   };
 
+  const registerUser = async () => {
+    const user = {
+      name: inputs.name.value,
+      username: inputs.username.value,
+      email: inputs.email.value,
+      password: inputs.password.value,
+    };
+
+    const config = {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(user)
+    };
+
+    try{
+      let response = await fetch('http://localhost:9000/register-user', config);
+      let data = await response.json();
+
+      if(!data.ok){
+        auxDict.email.color = "red";
+        setErrorMsg(`${user.email} has already an account`);
+        setDisplayError(true);
+      }
+      else{
+        localStorage.setItem('token', data.token);
+        props.history.push('/chat-page');
+      }
+    } catch(err){
+      console.log(err);
+    }
+  };
+
   const SubmitData = () => {
-    let auxDict = Object.assign({}, inputs);
     let filledFields = true;
+    let errorExists = true;
 
     for (var key in inputs) {
       if (inputs[key].value === "") {
@@ -59,31 +98,25 @@ function RegisterPage() {
       }
     }
 
-    if (!filledFields) {
-      setDisplayError(true);
-      setErrorMsg("One or more fields were not filled");
-    } else {
-      const strengthPassword =
-        "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})";
-
-      const validEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      
-      if(!inputs.email.value.match(validEmail)){
-        auxDict.email.color = "red";
-        setErrorMsg("Invalid email");
-      }
-      
-      else if (!inputs.password.value.match(strengthPassword)) {
-        auxDict.password.color = "red";
-        setErrorMsg(
-          "Password must contains at least one uppercase, lowercase, number and special character"
-        );
-      }
-
-      setDisplayError(true);
+    if(!filledFields){
+      setErrorMsg("One or more fields are required");
+    }
+    else if(!inputs.email.value.match(VALID_EMAIL)){
+      auxDict.email.color = "red";
+      setErrorMsg("Invalid email");
+    }
+    else if(!inputs.password.value.match(STRONG_PASSWORD)){
+      auxDict.password.color = "red";
+      setErrorMsg(
+        "Password must contains at least one uppercase, lowercase, number and special character"
+      );
+    }
+    else{
+      errorExists = false;
+      registerUser();
     }
 
-    setInputs(auxDict);
+    setDisplayError(errorExists);
   };
 
   const RenderError = () => {

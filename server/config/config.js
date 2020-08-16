@@ -12,3 +12,7 @@ else{
 }
 
 process.env.URL_DB = urlDB;
+
+process.env.SEED = process.env.SEED || "dev-sign";
+
+process.env.TOKEN_EXPIRATION = "5min";

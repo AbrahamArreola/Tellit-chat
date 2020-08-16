@@ -7,6 +7,8 @@ import loginImage from "../../images/logo.JPG";
 
 import ImageCarousel from "./image-carousel";
 
+const VALID_EMAIL = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 function LoginPage(props) {
   const [state, setState] = useState({
     iconClass: "fa fa-eye-slash",
@@ -18,6 +20,8 @@ function LoginPage(props) {
     email: { value: "", color: null },
     password: { value: "", color: null },
   });
+
+  let auxDict = Object.assign({}, inputs);
 
   const [displayError, setDisplayError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -39,7 +43,6 @@ function LoginPage(props) {
   };
 
   const handleInputChange = (e) => {
-    let auxDict = Object.assign({}, inputs);
     auxDict[e.target.name].value = e.target.value;
     auxDict[e.target.name].color = null;
 
@@ -62,9 +65,55 @@ function LoginPage(props) {
     return null;
   };
 
+  const loginUser = async () => {
+    const user = {
+      email: inputs.email.value,
+      password: inputs.password.value
+    };
+
+    const config = {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(user)
+    };
+
+    try{
+      let response = await fetch('http://localhost:9000/login-user', config);
+      let data = await response.json();
+
+      if(!data.ok){
+        if(data.field){
+          switch(data.field){
+            case "email":
+              auxDict.email.color = "red";
+              setErrorMsg(data.message);
+            break;
+
+            case "password":
+              auxDict.password.color = "red";
+              setErrorMsg(data.message);
+            break;
+
+            default: break;
+          }
+          setDisplayError(true);
+        }
+      }
+      else{
+        localStorage.setItem('token', data.token);
+        props.history.push('/chat-page');
+      }
+    } catch(err){
+      console.log(err);
+    }
+  }
+
   const submitLogin = () => {
-    let auxDict = Object.assign({}, inputs);
     let filledFields = true;
+    let errorExists = true;
 
     for (var key in inputs) {
       if (inputs[key].value === "") {
@@ -73,22 +122,19 @@ function LoginPage(props) {
       }
     }
 
-    if (!filledFields) {
-      setDisplayError(true);
-      setErrorMsg("One or more fields were not filled");
-    }else{
-      const validEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      
-      if(!inputs.email.value.match(validEmail)){
-        auxDict.email.color = "red";
-        setErrorMsg("Invalid email");
-      }
-
-      setInputs(auxDict);
+    if(!filledFields){
+      setErrorMsg("One or more fields are required");
+    }
+    else if(!inputs.email.value.match(VALID_EMAIL)){
+      auxDict.email.color = "red";
+      setErrorMsg("Invalid email");
+    }
+    else{
+      errorExists = false;
+      loginUser();
     }
 
-    setInputs(auxDict);
-    //props.history.push("/chat-page");
+    setDisplayError(errorExists);
   };
 
   return (
