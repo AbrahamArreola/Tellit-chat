@@ -4,8 +4,13 @@ import "../../styles/chat-card.scss";
 import testLogo from "../../images/conversation-img.jpg";
 
 function ChatCard(props) {
+
+  const onChatCardClick = () => {
+    props.action(props.data);
+  }
+
   return (
-    <div className="chat-card-container">
+    <div className="chat-card-container" onClick={onChatCardClick}>
       <img src={testLogo} alt="Unavailable" />
       <div className="chat-card-information">
         <div className="chat-card-data">

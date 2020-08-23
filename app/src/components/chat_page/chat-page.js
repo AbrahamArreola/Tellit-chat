@@ -103,15 +103,11 @@ function ChatPage() {
         </div>
       </CSSTransition>
 
-      <div ref={groupRef} className="option-panel"> 
-        <ChatGroupPanel closeGroup={() => setDisplayGroup(false)}/>
-      </div>
-
-      {/* <CSSTransition nodeRef={groupRef} in={displayGroup} timeout={500} classNames="option-panel" unmountOnExit>
+      <CSSTransition nodeRef={groupRef} in={displayGroup} timeout={500} classNames="option-panel" unmountOnExit>
         <div ref={groupRef} className="option-panel"> 
           <ChatGroupPanel closeGroup={() => setDisplayGroup(false)}/>
         </div>
-      </CSSTransition> */}
+      </CSSTransition>
 
       <div id="chat-main-menu-select" style={{ display: displayMenu }}>
         <ul className="list-group">
