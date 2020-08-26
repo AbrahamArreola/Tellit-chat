@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { CSSTransition } from "react-transition-group";
 import "../../styles/chat-group-panel.scss";
 
 import testLogo from "../../images/conversation-img.jpg";
@@ -28,11 +29,30 @@ function ChatGroupPanel(props) {
       name: "Sofía Franco",
       message: "Hello A",
     },
+    {
+      id: 4,
+      name: "Sofía Franco",
+      message: "Hello A",
+    },
+    {
+      id: 4,
+      name: "Sofía Franco",
+      message: "Hello A",
+    },
+    {
+      id: 4,
+      name: "Sofía Franco",
+      message: "Hello A",
+    },
   ]);
 
   const [selectedContacts, setSelectedContacts] = useState([]);
 
   var scrollBottom = React.createRef(null);
+
+  const [displayConfirmPanel, setDisplayConfirmPanel] = useState(false);
+
+  const confirmPanelRef = React.createRef(null);
 
   const selectContact = (data) => {
     var arrayData = [...contacts];
@@ -69,8 +89,66 @@ function ChatGroupPanel(props) {
     );
   };
 
+  const CreateGroupPanel = () => {
+
+    const [confirmButton, setConfirmButton] = useState(false);
+
+    return (
+      <div
+        ref={confirmPanelRef}
+        id="chat-create-group-panel"
+        className="option-panel chat-option-panel-container"
+      >
+        <div className="main-color-panel">
+          <div className="main-panel-header">
+            <i
+              className="fa fa-arrow-left"
+              onClick={() => setDisplayConfirmPanel(false)}
+            ></i>
+            <p>New group</p>
+          </div>
+        </div>
+
+        <div className="secondary-color-panel">
+          <img src={testLogo} alt="Unavailable" />
+        </div>
+
+        <div id="group-information-panel" className="information-panel">
+          <p>Group</p>
+          <div>
+            <input
+              type="text"
+              maxLength={20}
+              placeholder="Enter group's name"
+              onChange={(e) => setConfirmButton(e.target.value.length !== 0)}
+            />
+          </div>
+        </div>
+
+        <div className="panel-confirm-panel">
+          <button
+            type="button"
+            className="btn btn-outline-primary fa fa-arrow-right"
+            style={{
+              display: confirmButton ? "block" : "none",
+            }}
+          ></button>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div id="chat-group-panel" className="chat-option-panel-container">
+      <CSSTransition
+        nodeRef={confirmPanelRef}
+        in={displayConfirmPanel}
+        timeout={500}
+        classNames="option-panel"
+        unmountOnExit
+      >
+        <CreateGroupPanel />
+      </CSSTransition>
       <div className="main-color-panel">
         <div className="main-panel-header">
           <i className="fa fa-arrow-left" onClick={props.closeGroup}></i>
@@ -115,7 +193,14 @@ function ChatGroupPanel(props) {
           ))}
       </div>
 
-      <div id="contact-confirm-panel"></div>
+      <div className="panel-confirm-panel">
+        <button
+          type="button"
+          className="btn btn-outline-primary fa fa-arrow-right"
+          style={{ display: selectedContacts.length === 0 ? "none" : "block" }}
+          onClick={() => setDisplayConfirmPanel(true)}
+        ></button>
+      </div>
     </div>
   );
 }
