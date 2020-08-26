@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
-import { ChatProfilePanel, ChatGroupPanel } from "./chat-option-panel";
+import ChatProfilePanel from "./chat-profile-panel";
+import ChatGroupPanel from "./chat-group-panel";
 import { CSSTransition } from "react-transition-group";
 import "../../styles/chat-page.scss";
 
@@ -124,6 +125,9 @@ function ChatPage() {
             alt="unavailable"
           />
           <div id="chat-main-menu-options">
+            <div className="main-menu-options-icons">
+              <i id="chat-add-user-icon" className="fa fa-user-plus"></i>
+            </div>
             <div className="main-menu-options-icons">
               <i id="chat-comment-icon" className="fa fa-comments"></i>
             </div>

@@ -1,4 +1,3 @@
-//PROFILE PANEL
 .chat-option-panel-container {
     width: 100%;
     height: 100%;
@@ -30,6 +29,7 @@
     }
 
     .secondary-color-panel {
+        position: relative;
         width: 100%;
         text-align: center;
         padding: 2em 0;
@@ -38,6 +38,22 @@
             width: 14em;
             height: 14em;
             border-radius: 50%;
+
+            &:hover{
+                filter: brightness(50%);
+                cursor: pointer;
+            }
+        }
+
+        .change-photo-container{
+            position: absolute;
+            top: 115px;
+            width: 100%;
+            pointer-events: none;
+
+            i, p{
+                color: white;
+            }
         }
     }
 
@@ -100,56 +116,5 @@
         margin-left: 20px;
         margin-right: 10px;
         cursor: pointer;
-    }
-}
-
-//GROUP PANEL
-#chat-group-panel {
-    display: flex;
-    flex-direction: column;
-    background-color: white;
-
-    #contact-option-container {
-        width: 100%;
-        min-height: 110px;
-        max-height: 200px;
-        background-color: white;
-        padding: 2em 3em 0 3em;
-        overflow-y: auto;
-        margin-bottom: 10px;
-
-        #contact-added-container{
-            width: 100%;
-        }
-
-        input {
-            position: relative;
-            width: 100%;
-            border-color: transparent;
-            border: none;
-            font-family: "Segoe UI";
-            border-bottom: solid 2px #64B0F0;
-
-            &:focus{
-                outline: none;
-            }
-        }
-    }
-
-    #chat-contacts-container {
-        height: 100%;
-        overflow-y: auto;
-        overflow-x: hidden;
-
-        .chat-card-container{
-            background-color: white !important;
-        }
-    }
-
-    #contact-confirm-panel{
-        bottom: 0;
-        width: 100%;
-        height: 100px;
-        background-color: #e6e6e6;
     }
 }

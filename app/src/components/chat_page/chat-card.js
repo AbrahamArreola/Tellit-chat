@@ -6,7 +6,13 @@ import testLogo from "../../images/conversation-img.jpg";
 function ChatCard(props) {
 
   const onChatCardClick = () => {
-    props.action(props.data);
+    switch(props.parent){
+      case "group":
+        props.action(props.data);
+        break;
+
+      default: break;
+    }
   }
 
   return (

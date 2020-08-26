@@ -1,78 +1,9 @@
 import React, { useState } from "react";
-import "../../styles/chat-option-panel.scss";
+import "../../styles/chat-group-panel.scss";
 
 import testLogo from "../../images/conversation-img.jpg";
 
 import ChatCard from "./chat-card";
-
-function ChatProfilePanel(props) {
-  const [nameReadOnly, setNameReadOnly] = useState(true);
-  const [name, setName] = useState("Abraham Arreola");
-  var nameInputRef;
-
-  const [statusReadOnly, setStatusRedOnly] = useState(true);
-  const [status, setStatus] = useState("Good");
-  var statusInputRef;
-
-  return (
-    <div className="chat-option-panel-container">
-      <div className="main-color-panel">
-        <div className="main-panel-header">
-          <i className="fa fa-arrow-left" onClick={props.closeProfile}></i>
-          <p>Profile</p>
-        </div>
-      </div>
-
-      <div className="secondary-color-panel">
-        <img src={testLogo} alt="unavailable" />
-      </div>
-
-      <div className="information-panel">
-        <p>Your name</p>
-        <div
-          style={!nameReadOnly ? { borderBottom: "solid 3px #64B0F0" } : null}
-        >
-          <input
-            ref={(input) => (nameInputRef = input)}
-            type="text"
-            value={name}
-            readOnly={nameReadOnly}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <i
-            className={nameReadOnly ? "fa fa-pencil" : "fa fa-check"}
-            onClick={() => {
-              setNameReadOnly(!nameReadOnly);
-              nameInputRef.focus();
-            }}
-          ></i>
-        </div>
-      </div>
-
-      <div className="information-panel">
-        <p>Status</p>
-        <div
-          style={!statusReadOnly ? { borderBottom: "solid 3px #64B0F0" } : null}
-        >
-          <input
-            ref={(input) => (statusInputRef = input)}
-            type="text"
-            value={status}
-            readOnly={statusReadOnly}
-            onChange={(e) => setStatus(e.target.value)}
-          />
-          <i
-            className={statusReadOnly ? "fa fa-pencil" : "fa fa-check"}
-            onClick={() => {
-              setStatusRedOnly(!statusReadOnly);
-              statusInputRef.focus();
-            }}
-          ></i>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 function ChatGroupPanel(props) {
   const [contacts, setContacts] = useState([
@@ -123,10 +54,9 @@ function ChatGroupPanel(props) {
   };
 
   const ContactAdded = (props) => {
-
     const onCloseClick = () => {
       props.action(props.data);
-    }
+    };
 
     return (
       <div>
@@ -151,7 +81,7 @@ function ChatGroupPanel(props) {
       <div id="contact-option-container">
         <div id="contact-added-container">
           {selectedContacts.map((object, index) => (
-            <ContactAdded key={index} data={object} action={unselectContact}/>
+            <ContactAdded key={index} data={object} action={unselectContact} />
           ))}
         </div>
         <input type="text" placeholder="Type the contact's name" />
@@ -164,14 +94,25 @@ function ChatGroupPanel(props) {
       </div>
 
       <div id="chat-contacts-container">
-        {contacts.map((object, index) => (
-          <ChatCard
-            key={index}
-            data={object}
-            parent={"group"}
-            action={selectContact}
-          />
-        ))}
+        {[]
+          .concat(contacts)
+          .sort((a, b) => {
+            if (a.name < b.name) {
+              return -1;
+            }
+            if (a.name > b.name) {
+              return 1;
+            }
+            return 0;
+          })
+          .map((object, index) => (
+            <ChatCard
+              key={index}
+              data={object}
+              parent={"group"}
+              action={selectContact}
+            />
+          ))}
       </div>
 
       <div id="contact-confirm-panel"></div>
@@ -179,4 +120,4 @@ function ChatGroupPanel(props) {
   );
 }
 
-export { ChatProfilePanel, ChatGroupPanel };
+export default ChatGroupPanel;
