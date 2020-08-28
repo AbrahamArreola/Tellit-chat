@@ -118,7 +118,7 @@ function ChatGroupPanel(props) {
           <div>
             <input
               type="text"
-              maxLength={20}
+              maxLength={25}
               placeholder="Enter group's name"
               onChange={(e) => setConfirmButton(e.target.value.length !== 0)}
             />
@@ -149,6 +149,7 @@ function ChatGroupPanel(props) {
       >
         <CreateGroupPanel />
       </CSSTransition>
+      
       <div className="main-color-panel">
         <div className="main-panel-header">
           <i className="fa fa-arrow-left" onClick={props.closeGroup}></i>

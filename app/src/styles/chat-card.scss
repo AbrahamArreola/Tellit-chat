@@ -45,6 +45,10 @@
             }
         }
     }
+
+    &:hover{
+        background-color: #ededed;
+    }
 }
 
 @media (max-width: 500px) {

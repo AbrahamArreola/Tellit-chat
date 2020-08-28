@@ -58,6 +58,7 @@ function ChatProfilePanel(props) {
             value={name}
             readOnly={nameReadOnly}
             onChange={(e) => setName(e.target.value)}
+            maxLength={25}
           />
           <i
             className={nameReadOnly ? "fa fa-pencil" : "fa fa-check"}
@@ -80,6 +81,7 @@ function ChatProfilePanel(props) {
             value={status}
             readOnly={statusReadOnly}
             onChange={(e) => setStatus(e.target.value)}
+            maxLength={25}
           />
           <i
             className={statusReadOnly ? "fa fa-pencil" : "fa fa-check"}

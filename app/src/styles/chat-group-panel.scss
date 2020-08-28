@@ -37,6 +37,10 @@
 
         .chat-card-container {
             background-color: white !important;
+
+            &:hover{
+                background-color: #ededed !important;
+            }
         }
     }
 }

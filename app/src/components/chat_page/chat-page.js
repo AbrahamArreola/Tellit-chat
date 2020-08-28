@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
-import ChatProfilePanel from "./chat-profile-panel";
-import ChatGroupPanel from "./chat-group-panel";
 import { CSSTransition } from "react-transition-group";
 import "../../styles/chat-page.scss";
+
+import ChatProfilePanel from "./chat-profile-panel";
+import ChatGroupPanel from "./chat-group-panel";
+import ChatContactPanel from "./chat-contact-panel";
 
 import conversationImage from "../../images/conversation-img.jpg";
 
@@ -78,9 +80,11 @@ function ChatPage() {
   const [selectedItem, setSelectedItem] = useState("transparent");
   const [displayProfile, setDisplayProfile] = useState(false);
   const [displayGroup, setDisplayGroup] = useState(false);
+  const [displayContacts, setDisplayContacts] = useState(true);
 
   const profileRef = React.createRef(null);
   const groupRef = React.createRef(null);
+  const contactsRef = React.createRef(null);
 
   const onMainContainerClick = (e) => {
     if (e.target.id !== "chat-menu-icon") {
@@ -105,8 +109,14 @@ function ChatPage() {
       </CSSTransition>
 
       <CSSTransition nodeRef={groupRef} in={displayGroup} timeout={500} classNames="option-panel" unmountOnExit>
-        <div ref={groupRef} className="option-panel"> 
+        <div ref={groupRef} className="option-panel" style={{zIndex: '2'}}> 
           <ChatGroupPanel closeGroup={() => setDisplayGroup(false)}/>
+        </div>
+      </CSSTransition>
+
+      <CSSTransition nodeRef={contactsRef} in={displayContacts} timeout={500} classNames="option-panel" unmountOnExit>
+        <div ref={contactsRef} className="option-panel"> 
+          <ChatContactPanel closeContacts={() => setDisplayContacts(false)} openGroup={() => setDisplayGroup(true)}/>
         </div>
       </CSSTransition>
 
@@ -123,13 +133,14 @@ function ChatPage() {
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/e/e8/The_Joker_at_Wax_Museum_Plus.jpg"
             alt="unavailable"
+            onClick={() => setDisplayProfile(true)}
           />
           <div id="chat-main-menu-options">
             <div className="main-menu-options-icons">
               <i id="chat-add-user-icon" className="fa fa-user-plus"></i>
             </div>
             <div className="main-menu-options-icons">
-              <i id="chat-comment-icon" className="fa fa-comments"></i>
+              <i id="chat-comment-icon" className="fa fa-comments" onClick={() => setDisplayContacts(true)}></i>
             </div>
             <div
               className="main-menu-options-icons"
