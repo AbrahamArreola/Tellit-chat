@@ -30,18 +30,8 @@ function ChatGroupPanel(props) {
       message: "Hello A",
     },
     {
-      id: 4,
-      name: "Sofía Franco",
-      message: "Hello A",
-    },
-    {
-      id: 4,
-      name: "Sofía Franco",
-      message: "Hello A",
-    },
-    {
-      id: 4,
-      name: "Sofía Franco",
+      id: 5,
+      name: "Juan López",
       message: "Hello A",
     },
   ]);

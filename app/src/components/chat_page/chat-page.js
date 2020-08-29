@@ -80,7 +80,7 @@ function ChatPage() {
   const [selectedItem, setSelectedItem] = useState("transparent");
   const [displayProfile, setDisplayProfile] = useState(false);
   const [displayGroup, setDisplayGroup] = useState(false);
-  const [displayContacts, setDisplayContacts] = useState(true);
+  const [displayContacts, setDisplayContacts] = useState(false);
 
   const profileRef = React.createRef(null);
   const groupRef = React.createRef(null);
