@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
+import TextareaAutosize from 'react-textarea-autosize';
 import "../../styles/chat-page.scss";
 
 import ChatProfilePanel from "./chat-profile-panel";
@@ -81,6 +82,7 @@ function ChatPage() {
   const [displayProfile, setDisplayProfile] = useState(false);
   const [displayGroup, setDisplayGroup] = useState(false);
   const [displayContacts, setDisplayContacts] = useState(false);
+  const [displayConversation, setDisplayConversation] = useState(false);
 
   const profileRef = React.createRef(null);
   const groupRef = React.createRef(null);
@@ -160,18 +162,37 @@ function ChatPage() {
         </div>
         <div id="chats-component-container">
           {data.map((object, index) => (
-            <ChatCard key={index} data={object} />
+            <ChatCard key={index} data={object} parent={"chat"} action={() => setDisplayConversation(true)}/>
           ))}
         </div>
       </div>
 
       <div id="chat-right-side-content">
-        <div id="conversation-splash-screen">
-          <img src={conversationImage} alt="unavailable" />
-          <h3>Welcome to tellit chat page!</h3>
-          <p>
-            You can search for a contact or a conversation on the left menu.
-          </p>
+        <div id="splash-screen-container" style={{display: displayConversation ? "none" : null}}>
+          <div id="conversation-splash-screen">
+            <img src={conversationImage} alt="unavailable" />
+            <h3>Welcome to tellit chat page!</h3>
+            <p>
+              You can search for a contact or a conversation on the left menu.
+            </p>
+          </div>
+        </div>
+
+        <div id="chat-conversation-view" style={{display: displayConversation ? null : "none"}}>
+          <div id="header-contact-information">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/The_Joker_at_Wax_Museum_Plus.jpg" alt="unavailable"/>
+            <p>Contact</p>
+          </div>
+
+          <div id="chat-conversation-messages">
+            
+          </div>
+
+          <div id="chat-message-bar">
+            <i className="fa fa-paperclip"></i>
+            <TextareaAutosize placeholder="Type a message"/>
+            <i className="fa fa-paper-plane"></i>
+          </div>
         </div>
       </div>
     </div>

@@ -11,6 +11,10 @@ function ChatCard(props) {
         props.action(props.data);
         break;
 
+      case "chat":
+        props.action();
+        break;
+
       default: break;
     }
   }
