@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
-import TextareaAutosize from 'react-textarea-autosize';
 import "../../styles/chat-page.scss";
 
 import ChatProfilePanel from "./chat-profile-panel";
 import ChatGroupPanel from "./chat-group-panel";
 import ChatContactPanel from "./chat-contact-panel";
+import ChatConversationView from "./chat-conversation";
 
 import conversationImage from "../../images/conversation-img.jpg";
 
@@ -83,6 +83,8 @@ function ChatPage() {
   const [displayGroup, setDisplayGroup] = useState(false);
   const [displayContacts, setDisplayContacts] = useState(false);
   const [displayConversation, setDisplayConversation] = useState(false);
+
+  const [conversationData, setConversationData] = useState({});
 
   const profileRef = React.createRef(null);
   const groupRef = React.createRef(null);
@@ -162,7 +164,8 @@ function ChatPage() {
         </div>
         <div id="chats-component-container">
           {data.map((object, index) => (
-            <ChatCard key={index} data={object} parent={"chat"} action={() => setDisplayConversation(true)}/>
+            <ChatCard key={index} data={object} parent={"chat"} action={() => setDisplayConversation(true)}
+              edit={setConversationData}/>
           ))}
         </div>
       </div>
@@ -178,22 +181,7 @@ function ChatPage() {
           </div>
         </div>
 
-        <div id="chat-conversation-view" style={{display: displayConversation ? null : "none"}}>
-          <div id="header-contact-information">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/The_Joker_at_Wax_Museum_Plus.jpg" alt="unavailable"/>
-            <p>Contact</p>
-          </div>
-
-          <div id="chat-conversation-messages">
-            
-          </div>
-
-          <div id="chat-message-bar">
-            <i className="fa fa-paperclip"></i>
-            <TextareaAutosize placeholder="Type a message"/>
-            <i className="fa fa-paper-plane"></i>
-          </div>
-        </div>
+        <ChatConversationView display={displayConversation} data={conversationData}/>
       </div>
     </div>
   );

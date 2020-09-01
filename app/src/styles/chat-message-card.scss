@@ -1,0 +1,29 @@
+#message-card-container{
+    width: 100%;
+    padding: 5px 0;
+
+    .message-card{
+        display: inline-block;
+        padding: 10px;
+        border: solid 1px #bababa;
+        border-radius: 10px;
+
+        p{
+            margin: 0;
+            white-space: pre-wrap;
+        }
+    }
+
+    .my-message-card{
+        float: right;
+        max-width: 60%;
+        background-color: #64B0F0;
+        margin-right: 8%;
+    }
+
+    .contact-message-card{
+        max-width: 60%;
+        background-color: white;
+        margin-left: 8%;
+    }
+}
