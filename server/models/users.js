@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 const path = require('path');
+const { env } = require('process');
 
 let Schema = mongoose.Schema;
 
@@ -24,7 +25,11 @@ let userSchema = new Schema({
     },
     image: {
         type: String,
-        default: path.resolve(__dirname, '../assets/images/default_user.png')
+        default: 'http://localhost:9000/user/profile-image/default-image'
+    },
+    statusComment: {
+        type: String,
+        default: "I'm using tell it chat!"
     },
     status: {
         type: Boolean,

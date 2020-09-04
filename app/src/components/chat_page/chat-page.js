@@ -76,10 +76,12 @@ var data = [
   },
 ];
 
-function ChatPage() {
+function ChatPage(props) {
+  const accessData = props.location.state;
+
   const [displayMenu, setDisplayMenu] = useState("none");
   const [selectedItem, setSelectedItem] = useState("transparent");
-  const [displayProfile, setDisplayProfile] = useState(false);
+  const [displayProfile, setDisplayProfile] = useState(accessData.displayProfile || false);
   const [displayGroup, setDisplayGroup] = useState(false);
   const [displayContacts, setDisplayContacts] = useState(false);
   const [displayConversation, setDisplayConversation] = useState(false);
@@ -108,7 +110,7 @@ function ChatPage() {
     <div id="chat-page-main-container" onClick={onMainContainerClick}>
       <CSSTransition nodeRef={profileRef} in={displayProfile} timeout={500} classNames="option-panel" unmountOnExit>
         <div ref={profileRef} className="option-panel"> 
-          <ChatProfilePanel closeProfile={() => setDisplayProfile(false)}/>
+          <ChatProfilePanel closeProfile={() => setDisplayProfile(false)} userData={accessData.userData}/>
         </div>
       </CSSTransition>
 
@@ -135,7 +137,7 @@ function ChatPage() {
       <div id="chat-left-side-content">
         <div id="chat-main-menu">
           <img
-            src="https://upload.wikimedia.org/wikipedia/commons/e/e8/The_Joker_at_Wax_Museum_Plus.jpg"
+            src={accessData.userData.image}
             alt="unavailable"
             onClick={() => setDisplayProfile(true)}
           />

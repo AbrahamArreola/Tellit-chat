@@ -1,15 +1,13 @@
 import React, { useState } from "react";
 import "../../styles/chat-profile-panel.scss";
 
-import testLogo from "../../images/conversation-img.jpg";
-
 function ChatProfilePanel(props) {
   const [nameReadOnly, setNameReadOnly] = useState(true);
-  const [name, setName] = useState("Abraham Arreola");
+  const [name, setName] = useState(props.userData.name);
   var nameInputRef;
 
   const [statusReadOnly, setStatusRedOnly] = useState(true);
-  const [status, setStatus] = useState("Good");
+  const [status, setStatus] = useState(props.userData.statusComment);
   var statusInputRef;
 
   const [changePhotoMsg, setChangePhotoMsg] = useState(false);
@@ -26,7 +24,7 @@ function ChatProfilePanel(props) {
 
       <div className="secondary-color-panel">
         <img
-          src={testLogo}
+          src={props.userData.image}
           alt="unavailable"
           onMouseOver={() => setChangePhotoMsg(true)}
           onMouseLeave={() => setChangePhotoMsg(false)}

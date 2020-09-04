@@ -7,6 +7,8 @@ import loginImage from "../../images/logo.JPG";
 
 import ImageCarousel from "./image-carousel";
 
+const APIRequests = require('../../utilities/api-requests');
+
 const STRONG_PASSWORD = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})";
 const VALID_EMAIL = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -60,18 +62,8 @@ function RegisterPage(props) {
       password: inputs.password.value,
     };
 
-    const config = {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(user)
-    };
-
     try{
-      let response = await fetch('http://localhost:9000/register-user', config);
-      let data = await response.json();
+      let data = await APIRequests.postRequest('http://localhost:9000/register-user', user);
 
       if(!data.ok){
         auxDict.email.color = "red";
@@ -79,11 +71,14 @@ function RegisterPage(props) {
         setDisplayError(true);
       }
       else{
-        localStorage.setItem('token', data.token);
-        props.history.push('/chat-page');
+        //localStorage.setItem('token', data.token);
+        props.history.push({
+          pathname: '/chat-page',
+          state: {userData: data.newUser, displayProfile: true}
+        });
       }
     } catch(err){
-      console.log(err);
+      alert(err);
     }
   };
 

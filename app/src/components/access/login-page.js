@@ -7,6 +7,8 @@ import loginImage from "../../images/logo.JPG";
 
 import ImageCarousel from "./image-carousel";
 
+const APIRequests = require('../../utilities/api-requests');
+
 const VALID_EMAIL = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 function LoginPage(props) {
@@ -71,18 +73,8 @@ function LoginPage(props) {
       password: inputs.password.value
     };
 
-    const config = {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(user)
-    };
-
     try{
-      let response = await fetch('http://localhost:9000/login-user', config);
-      let data = await response.json();
+      let data = await APIRequests.postRequest('http://localhost:9000/login-user', user);
 
       if(!data.ok){
         if(data.field){
@@ -103,11 +95,14 @@ function LoginPage(props) {
         }
       }
       else{
-        localStorage.setItem('token', data.token);
-        props.history.push('/chat-page');
+        //localStorage.setItem('token', data.token);
+        props.history.push({
+          pathname: '/chat-page',
+          state: {userData: data.user}
+        });
       }
     } catch(err){
-      console.log(err);
+      alert(err);
     }
   }
 
