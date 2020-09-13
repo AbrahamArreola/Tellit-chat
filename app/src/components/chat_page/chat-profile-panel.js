@@ -1,17 +1,44 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../styles/chat-profile-panel.scss";
 
+const APIRequests = require('../../utilities/api-requests');
+
 function ChatProfilePanel(props) {
+  const userID = props.userID;
+  
   const [nameReadOnly, setNameReadOnly] = useState(true);
-  const [name, setName] = useState(props.userData.name);
+  const [name, setName] = useState("");
   var nameInputRef;
 
   const [statusReadOnly, setStatusRedOnly] = useState(true);
-  const [status, setStatus] = useState(props.userData.statusComment);
+  const [status, setStatus] = useState("");
   var statusInputRef;
+
+  const [profileImg, setProfileImg] = useState(null);
 
   const [changePhotoMsg, setChangePhotoMsg] = useState(false);
   var fileDialog;
+
+  const updateUserProfile = async (newData) => {
+    try{
+      await APIRequests.putRequest(`http://localhost:9000/user/update/${userID}`, newData);
+    } catch(err){
+      alert(err);
+    }
+  }
+
+  useEffect(() => {
+    const getUserData = () => {
+      APIRequests.getRequest(`http://localhost:9000/user/get-profile/${userID}`)
+      .then(userData => {
+        setName(userData.user.name);
+        setStatus(userData.user.statusComment);
+        setProfileImg(userData.user.image);
+      })
+      .catch(err => alert(err));
+    }
+    getUserData();
+  },[userID]);
 
   return (
     <div className="chat-option-panel-container">
@@ -24,7 +51,7 @@ function ChatProfilePanel(props) {
 
       <div className="secondary-color-panel">
         <img
-          src={props.userData.image}
+          src={profileImg}
           alt="unavailable"
           onMouseOver={() => setChangePhotoMsg(true)}
           onMouseLeave={() => setChangePhotoMsg(false)}
@@ -55,13 +82,21 @@ function ChatProfilePanel(props) {
             type="text"
             value={name}
             readOnly={nameReadOnly}
-            onChange={(e) => setName(e.target.value)}
             maxLength={25}
+            onChange={(e) => setName(e.target.value)}
+            onKeyPress={(e) => {
+              if(e.key === "Enter"){
+                setNameReadOnly(!nameReadOnly);
+                !nameReadOnly && updateUserProfile({name});
+                nameInputRef.focus();
+              }
+            }}
           />
           <i
             className={nameReadOnly ? "fa fa-pencil" : "fa fa-check"}
-            onClick={() => {
+            onClick={(e) => {
               setNameReadOnly(!nameReadOnly);
+              !nameReadOnly && updateUserProfile({name});
               nameInputRef.focus();
             }}
           ></i>
@@ -78,13 +113,21 @@ function ChatProfilePanel(props) {
             type="text"
             value={status}
             readOnly={statusReadOnly}
+            maxLength={40}
             onChange={(e) => setStatus(e.target.value)}
-            maxLength={25}
+            onKeyPress={(e) => {
+              if(e.key === "Enter"){
+                setStatusRedOnly(!statusReadOnly);
+                !statusReadOnly && updateUserProfile({statusComment: status});
+                statusInputRef.focus();
+              }
+            }}
           />
           <i
             className={statusReadOnly ? "fa fa-pencil" : "fa fa-check"}
             onClick={() => {
               setStatusRedOnly(!statusReadOnly);
+              !statusReadOnly && updateUserProfile({statusComment: status});
               statusInputRef.focus();
             }}
           ></i>

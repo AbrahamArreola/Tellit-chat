@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 const path = require('path');
-const { env } = require('process');
 
 let Schema = mongoose.Schema;
 
@@ -25,7 +24,7 @@ let userSchema = new Schema({
     },
     image: {
         type: String,
-        default: 'http://localhost:9000/user/profile-image/default-image'
+        default: process.env.ENVIRONMENT + '/user/profile-image/default-image'
     },
     statusComment: {
         type: String,

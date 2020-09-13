@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
 import "../../styles/chat-page.scss";
@@ -7,10 +7,11 @@ import ChatProfilePanel from "./chat-profile-panel";
 import ChatGroupPanel from "./chat-group-panel";
 import ChatContactPanel from "./chat-contact-panel";
 import ChatConversationView from "./chat-conversation";
+import ChatCard from "./chat-card";
 
 import conversationImage from "../../images/conversation-img.jpg";
 
-import ChatCard from "./chat-card";
+const APIRequests = require('../../utilities/api-requests');
 
 var data = [
   {
@@ -78,10 +79,11 @@ var data = [
 
 function ChatPage(props) {
   const accessData = props.location.state;
-
+  const [userData, setUserData] = useState({});
+  
   const [displayMenu, setDisplayMenu] = useState("none");
   const [selectedItem, setSelectedItem] = useState("transparent");
-  const [displayProfile, setDisplayProfile] = useState(accessData.displayProfile || false);
+  const [displayProfile, setDisplayProfile] = useState((accessData && accessData.displayProfile) || false);
   const [displayGroup, setDisplayGroup] = useState(false);
   const [displayContacts, setDisplayContacts] = useState(false);
   const [displayConversation, setDisplayConversation] = useState(false);
@@ -106,11 +108,20 @@ function ChatPage(props) {
       : setSelectedItem("transparent");
   };
 
+  useEffect(() => {
+    const getUserData = () => {
+      APIRequests.getRequest(`http://localhost:9000/user/get-profile/${accessData.userID}`)
+      .then(userData => setUserData(userData.user))
+      .catch(err => alert(err));
+    }
+    getUserData();
+  },[accessData]);
+
   return (
     <div id="chat-page-main-container" onClick={onMainContainerClick}>
       <CSSTransition nodeRef={profileRef} in={displayProfile} timeout={500} classNames="option-panel" unmountOnExit>
         <div ref={profileRef} className="option-panel"> 
-          <ChatProfilePanel closeProfile={() => setDisplayProfile(false)} userData={accessData.userData}/>
+          <ChatProfilePanel closeProfile={() => setDisplayProfile(false)} userID={accessData.userID}/>
         </div>
       </CSSTransition>
 
@@ -137,7 +148,7 @@ function ChatPage(props) {
       <div id="chat-left-side-content">
         <div id="chat-main-menu">
           <img
-            src={accessData.userData.image}
+            src={userData.image}
             alt="unavailable"
             onClick={() => setDisplayProfile(true)}
           />

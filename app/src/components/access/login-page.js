@@ -98,7 +98,7 @@ function LoginPage(props) {
         //localStorage.setItem('token', data.token);
         props.history.push({
           pathname: '/chat-page',
-          state: {userData: data.user}
+          state: {userID: data.user._id}
         });
       }
     } catch(err){

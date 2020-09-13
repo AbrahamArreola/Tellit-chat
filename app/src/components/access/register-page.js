@@ -74,7 +74,7 @@ function RegisterPage(props) {
         //localStorage.setItem('token', data.token);
         props.history.push({
           pathname: '/chat-page',
-          state: {userData: data.newUser, displayProfile: true}
+          state: {userID: data.newUser._id, displayProfile: true}
         });
       }
     } catch(err){
